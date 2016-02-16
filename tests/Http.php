@@ -7,26 +7,26 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	public function testGoogleCom()
 	{
 		$robotsTxtContent = $this->getRobotsTxtContent('google.com');
 
-		$parser = new RobotsTxtParser($robotsTxtContent);
+		$parser = new Parser($robotsTxtContent);
 		$rules = $parser->getRules('*');
 		$this->assertNotEmpty($rules);
 		$this->assertArrayHasKey('disallow', $rules);
 		$this->assertGreaterThan(100, count($rules['disallow']), 'expected more than 100 disallow rules');
-		$this->assertGreaterThan(5, count($rules['sitemap']), 'expected more than 5 sitemaps');
+		$this->assertGreaterThan(3, count($rules['sitemap']), 'expected more than 3 sitemaps');
 	}
 
 	public function testRozetkaComUa()
 	{
 		$robotsTxtContent = $this->getRobotsTxtContent('rozetka.com.ua');
 
-		$parser = new RobotsTxtParser($robotsTxtContent);
+		$parser = new Parser($robotsTxtContent);
 		$rules = $parser->getRules('*');
 
 		$this->assertNotEmpty($rules);

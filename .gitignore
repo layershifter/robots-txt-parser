@@ -1,4 +1,4 @@
-.*
-!.keepdir
-!.travis.yml
+composer.lock
+composer.phar
 build/
+vendor/

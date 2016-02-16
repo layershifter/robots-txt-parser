@@ -4,18 +4,22 @@ class HostTest extends \PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param      $robotsTxtContent
+	 * @param null $expectedHost
+	 * @param null $message
 	 */
 	public function testHost($robotsTxtContent, $expectedHost = NULL, $message = NULL)
 	{
 		// init parser
-		$parser = new RobotsTxtParser($robotsTxtContent);
+		$parser = new Parser($robotsTxtContent);
 		$rules = $parser->getRules();
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$this->assertInstanceOf('Parser', $parser);
 		$this->assertArrayHasKey('*', $rules, $message);
 
 		if ($expectedHost) {
@@ -34,35 +38,35 @@ class HostTest extends \PHPUnit_Framework_TestCase
 	public function generateDataForTest()
 	{
 		return array(
-			array("
+			array('
 					User-Agent: *
-				",
+				',
 				NULL,
 			),
-			array("
+			array('
 					User-Agent: *
 					Host: www.example.com
-				",
+				',
 				'www.example.com',
 			),
-			array("
+			array('
 					Host: example.com
-				",
+				',
 				'example.com',
 			),
-			array("
+			array('
 				Host: example.com
 				User-Agent: google
 				Host: www.example.com
-				",
+				',
 				'example.com',
 				'expected first host value'
 			),
-			array("
+			array('
 				User-Agent: google
 				Host: example.com
 				Host: www.example.com
-				",
+				',
 				'example.com',
 				'expected assign host to * because host is cross-section directive'
 			),

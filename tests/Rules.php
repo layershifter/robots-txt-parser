@@ -4,17 +4,20 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param       $robotsTxtContent
+	 * @param array $expectedRules
 	 */
-	public function testGetRules($robotsTxtContent, $expectedRules = array())
+	public function testGetRules($robotsTxtContent, array $expectedRules = array())
 	{
 		// init parser
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 		$this->assertEquals($expectedRules, $parser->getRules());
 	}
 
@@ -25,7 +28,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 	public function generateDataForTest()
 	{
 		return array(
-			array("
+			array('
 					User-Agent: *
 					Disallow: /ajax
 					Disallow: /search
@@ -35,7 +38,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 					Disallow: /
 
 					Host: example.com
-				",
+				',
 				'expectedRules' => array(
 					'*' => array(
 						'disallow' => array(
@@ -54,12 +57,12 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 					),
 				)
 			),
-			array("
+			array('
 					User-Agent: yandex
 					Clean-param: param1&param2 /path/file.php
 
 					Host: www.example.com
-				",
+				',
 				'expectedRules' => array(
 					'*' => array(
 						'host' => 'www.example.com',

@@ -4,16 +4,18 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param $robotsTxtContent
 	 */
 	public function testRemoveComments($robotsTxtContent)
 	{
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 
 		$rules = $parser->getRules('*');
 
@@ -22,11 +24,14 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider generateDataFor2Test
+	 *
+	 * @param $robotsTxtContent
+	 * @param $expectedDisallowValue
 	 */
 	public function testRemoveCommentsFromValue($robotsTxtContent, $expectedDisallowValue)
 	{
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 
 		$rules = $parser->getRules('*');
 
@@ -43,22 +48,22 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 	public function generateDataForTest()
 	{
 		return array(
-			array("
+			array('
 				User-agent: *
 				#Disallow: /tech
-			"),
-			array("
+			'),
+			array('
 				User-agent: *
 				Disallow: #/tech
-			"),
-			array("
+			'),
+			array('
 				User-agent: *
 				Disal # low: /tech
-			"),
-			array("
+			'),
+			array('
 				User-agent: *
 				Disallow#: /tech # ds
-			"),
+			'),
 		);
 	}
 
@@ -70,8 +75,8 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 	{
 		return array(
 			array(
-				"User-agent: *
-					Disallow: /tech #comment",
+				'User-agent: *
+					Disallow: /tech #comment',
 				'disallowValue' => '/tech',
 			),
 		);

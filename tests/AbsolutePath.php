@@ -7,16 +7,19 @@ class AbsolutePathTest extends \PHPUnit_Framework_TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param      $robotsTxtContent
+	 * @param null $expectedDisallow
 	 */
 	public function testDifferentDisallowPath($robotsTxtContent, $expectedDisallow = NULL)
 	{
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 		$rules = $parser->getRules('*');
 
 		if (!$expectedDisallow) {
@@ -37,24 +40,24 @@ class AbsolutePathTest extends \PHPUnit_Framework_TestCase
 	{
 		return array(
 			array(
-				"
+				'
 				User-Agent: *
 				Disallow:
-				",
-				NULL
+				',
+				null
 			),
 			array(
-				"
+				'
 				User-Agent: *
 				Disallow: /path
-				",
+				',
 				'/path'
 			),
 			array(
-				"
+				'
 				User-Agent: *
 				Disallow: http://example.com/path
-				",
+				',
 				'http://example.com/path'
 			),
 		);

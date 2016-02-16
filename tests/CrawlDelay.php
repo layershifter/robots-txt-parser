@@ -7,17 +7,19 @@ class CrawlDelayTest extends \PHPUnit_Framework_TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param $robotsTxtContent
 	 */
 	public function testCrawlDelay($robotsTxtContent)
 	{
 		// init parser
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 		$rules = $parser->getRules();
 		$this->assertArrayHasKey('ahrefsbot', $rules);
 		$this->assertArrayHasKey('crawl-delay', $rules['ahrefsbot']);
@@ -31,10 +33,10 @@ class CrawlDelayTest extends \PHPUnit_Framework_TestCase
 	public function generateDataForTest()
 	{
 		return array(
-			array("
+			array('
 				User-Agent: AhrefsBot
 				Crawl-Delay: 1.5
-			")
+			')
 		);
 	}
 }

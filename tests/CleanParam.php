@@ -7,18 +7,21 @@ class CleanParamTest extends \PHPUnit_Framework_TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		require_once(realpath(__DIR__.'/../RobotsTxtParser.php'));
+		require_once(realpath(__DIR__.'/../Parser.php'));
 	}
 
 	/**
-	 * @link https://help.yandex.ru/webmaster/controlling-robot/robots-txt.xml#clean-param
+	 * @link         https://help.yandex.ru/webmaster/controlling-robot/robots-txt.xml#clean-param
 	 *
 	 * @dataProvider generateDataForTest
+	 *
+	 * @param      $robotsTxtContent
+	 * @param null $message
 	 */
 	public function testCleanParam($robotsTxtContent, $message = NULL)
 	{
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 		$rules = $parser->getRules();
 		$this->assertArrayHasKey('*', $rules);
 		$this->assertArrayHasKey('clean-param', $rules['*']);
@@ -27,11 +30,14 @@ class CleanParamTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider dataCleanParamWithPathTest
+	 *
+	 * @param $robotsTxtContent
+	 * @param $expectedCleanParamValue
 	 */
 	public function testCleanParamWithPath($robotsTxtContent, $expectedCleanParamValue)
 	{
-		$parser = new RobotsTxtParser($robotsTxtContent);
-		$this->assertInstanceOf('RobotsTxtParser', $parser);
+		$parser = new Parser($robotsTxtContent);
+		$this->assertInstanceOf('Parser', $parser);
 		$rules = $parser->getRules();
 		$this->assertArrayHasKey('*', $rules);
 		$this->assertArrayHasKey('clean-param', $rules['*']);
@@ -46,19 +52,19 @@ class CleanParamTest extends \PHPUnit_Framework_TestCase
 	{
 		return array(
 			array(
-				"
+				'
 				User-Agent: *
 				#Clean-param: utm_source_commented&comment
 				Clean-param: utm_source&utm_medium&utm.campaign
-				",
+				',
 				'with comment'
 			),
 			array(
-				"
+				'
 				User-Agent: *
 				Clean-param: utm_source&utm_medium&utm.campaign
 				Clean-param: utm_source&utm_medium&utm.campaign
-				",
+				',
 				'expected to remove repetitions of lines'
 			),
 		);
@@ -71,11 +77,11 @@ class CleanParamTest extends \PHPUnit_Framework_TestCase
 	public function dataCleanParamWithPathTest()
 	{
 		return array(
-			array("
+			array('
 				User-Agent: *
 				Clean-param: param1 /path/file.php
-				",
-				"param1 /path/file.php",
+				',
+				'param1 /path/file.php',
 			),
 		);
 	}

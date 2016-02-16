@@ -1,0 +1,26 @@
+{
+  "name": "layershifter/robots-parser",
+  "description": "Parser for robots.txt",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Eugene Yurkevich",
+      "email": "yurkevich@vicman.net"
+    },
+    {
+      "name": "Alexander Fedyashov",
+      "email": "a@fedyashov.com"
+    }
+  ],
+  "require": {
+    "phpunit/phpunit": "4.8.*",
+    "squizlabs/php_codesniffer": "2.5.*",
+    "phpmd/phpmd": "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "LayerShifter\\Robots\\": "src/"
+    }
+  }
+}
